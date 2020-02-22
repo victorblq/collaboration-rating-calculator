@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rating generator</title>
+</head>
+<body>
+    <form>
+        <div>
+            <label>Quantidade de multikills</label>
+            <input type="number" id="nro-multikills"/>
+        </div>
+        <div>
+            <label>Quantidade de firstkills</label>
+            <input type="number" id="nro-firstkills"/>
+        </div>
+        <div>
+            <label>Quantidade de flash assists</label>
+            <input type="number" id="nro-flash-assists"/>
+        </div>
+        <div>
+            <label>Quantidade de trades</label>
+            <input type="number" id="nro-trades"/>
+        </div>
+        <div>
+            <label>Quantidade de clutches</label>
+            <input type="number" id="nro-clutches"/>
+        </div>
+        <div>
+            <label>Quantidade de single kills</label>
+            <input type="number" id="nro-single-kills"/>
+        </div>
+        <div>
+            <label>Quantidade de assists</label>
+            <input type="number" id="nro-assists"/>
+        </div>
+        <div>
+            <label>Quantidade de survives</label>
+            <input type="number" id="nro-survives"/>
+        </div>
+        <div>
+            <label>Quantidade de utilitários utilizados (Smoke, molotov ou incendiaria)</label>
+            <input type="number" id="nro-utilitarios"/>
+        </div>
+        <div>
+            <label>ADR</label>
+            <input type="number" id="adr"/>
+        </div>
+        <div>
+            <label>Quantidade de rounds</label>
+            <input type="number" id="nro-rounds"/>
+        </div>
+        <div>
+            <button type="button" onclick="javascript: calcularRating()">Calcular Rating</button>
+        </div>
+        <div>
+            <span id="rating"></span>
+        </div>
+    </form>
+
+    <script>
+        var contadorPlayer = 1;
+
+        function calcularRating(){
+            let rounds = parseInt(document.getElementById("nro-rounds").value);
+            let kast = parseFloat(parseInt(document.getElementById("adr").value) / 100);
+
+            let multiKills = calcularRatingPorParametro(document.getElementById("nro-multikills").value, rounds, 0.55);
+            let firstkill = calcularRatingPorParametro(document.getElementById("nro-firstkills").value, rounds, 0.34);
+            let trades = calcularRatingPorParametro(document.getElementById("nro-trades").value, rounds, 0.21);
+            let flashAssists = calcularRatingPorParametro(document.getElementById("nro-flash-assists").value, rounds, 0.13);
+            let clutches = calcularRatingPorParametro(document.getElementById("nro-clutches").value, rounds, 0.08);
+            let singleKills = calcularRatingPorParametro(document.getElementById("nro-single-kills").value, rounds, 0.05);
+            let assists = calcularRatingPorParametro(document.getElementById("nro-assists").value, rounds, 0.03);
+            let survives = calcularRatingPorParametro(document.getElementById("nro-survives").value, rounds, 0.02);
+            let utilitarios = calcularRatingPorParametro(document.getElementById("nro-utilitarios").value, rounds, 0.01);
+
+            let mediaParametros = (multiKills + firstkill + flashAssists + trades + clutches + singleKills + assists + survives + utilitarios) / 9; 
+            let rating = mediaParametros * kast;
+
+            document.getElementById("rating").innerHTML += "<br>Rating Player " + contadorPlayer + ": " + rating.toFixed(4);
+            contadorPlayer++;
+            
+        }
+
+        function calcularRatingPorParametro(valorParametro, qntdRounds, peso){
+            return parseFloat((((parseInt(valorParametro) * 100) / qntdRounds) * peso).toFixed(4));
+        }
+    </script>
+</body>
+</html>
